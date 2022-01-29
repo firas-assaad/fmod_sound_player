@@ -146,11 +146,6 @@ namespace FmodSoundPlayer
 
         private void SoundList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (SoundList.SelectedIndex == lastItemIndex)
-            {
-                return;
-            }
-
             PlaySound();
         }
 
