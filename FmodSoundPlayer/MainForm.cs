@@ -9,7 +9,6 @@ namespace FmodSoundPlayer
 {
     public partial class MainForm : Form
     {
-
         private readonly FmodSystem fmodSystem;
         private Channel currentChannel;
         private int lastItemIndex;
@@ -100,7 +99,8 @@ namespace FmodSoundPlayer
 
         private void PlaySound()
         {
-            currentChannel = null;
+            StopSound();
+
             if (SoundList.SelectedItem is not string selectedItem)
             {
                 return;
@@ -117,6 +117,18 @@ namespace FmodSoundPlayer
             currentChannel.Paused = false;
         }
 
+        private void StopSound()
+        {
+            if (currentChannel == null || !currentChannel.IsPlaying)
+            {
+                currentChannel = null;
+                return;
+            }
+
+            currentChannel.Stop();
+            currentChannel = null;
+        }
+
         private Sound? LoadFmodSound(string fullPath)
         {
             return fmodSystem.CreateSound(fullPath, Mode._2D | Mode.Loop_Off);
@@ -128,10 +140,8 @@ namespace FmodSoundPlayer
             {
                 return;
             }
-            else
-            {
-                PlaySound();
-            }
+
+            PlaySound();
         }
 
         private void SoundList_SelectedIndexChanged(object sender, EventArgs e)
@@ -140,18 +150,13 @@ namespace FmodSoundPlayer
             {
                 return;
             }
+
             PlaySound();
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
-            if (currentChannel == null || !currentChannel.IsPlaying)
-            {
-                return;
-            }
-
-            currentChannel.Stop();
-            currentChannel = null;
+            StopSound();
         }
     }
 }
