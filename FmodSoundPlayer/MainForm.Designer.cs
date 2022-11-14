@@ -42,6 +42,7 @@ namespace FmodSoundPlayer
             this.PlayButton = new System.Windows.Forms.Button();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.StopButton = new System.Windows.Forms.Button();
+            this.LengthLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // DirectoryLabel
@@ -83,6 +84,7 @@ namespace FmodSoundPlayer
             this.SoundList.Size = new System.Drawing.Size(405, 334);
             this.SoundList.TabIndex = 3;
             this.SoundList.SelectedIndexChanged += new System.EventHandler(this.SoundList_SelectedIndexChanged);
+            this.SoundList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SoundList_KeyDown);
             // 
             // VolumeLabel
             // 
@@ -147,11 +149,21 @@ namespace FmodSoundPlayer
             this.StopButton.UseVisualStyleBackColor = true;
             this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
             // 
+            // LengthLabel
+            // 
+            this.LengthLabel.AutoSize = true;
+            this.LengthLabel.Location = new System.Drawing.Point(281, 394);
+            this.LengthLabel.Name = "LengthLabel";
+            this.LengthLabel.Size = new System.Drawing.Size(76, 15);
+            this.LengthLabel.TabIndex = 10;
+            this.LengthLabel.Text = "Length: 0.00s";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(431, 450);
+            this.Controls.Add(this.LengthLabel);
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.PlayButton);
             this.Controls.Add(this.PitchScrollBar);
@@ -184,6 +196,7 @@ namespace FmodSoundPlayer
         private System.Windows.Forms.Button PlayButton;
         private System.Windows.Forms.Timer UpdateTimer;
         private System.Windows.Forms.Button StopButton;
+        private System.Windows.Forms.Label LengthLabel;
     }
 }
 

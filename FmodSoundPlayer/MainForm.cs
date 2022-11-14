@@ -1,6 +1,7 @@
 ﻿using FmodAudio;
 using FmodSoundPlayer.Properties;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -12,6 +13,7 @@ namespace FmodSoundPlayer
         private readonly FmodSystem fmodSystem;
         private Channel currentChannel;
         private int lastItemIndex;
+        private Stopwatch playStopwatch;
         private static readonly string[] ValidExtensions =
         {
             "wav",
@@ -95,6 +97,17 @@ namespace FmodSoundPlayer
         private void UpdateTimer_Tick(object sender, EventArgs e)
         {
             fmodSystem.Update();
+            var stopwatchActive = playStopwatch != null && playStopwatch.IsRunning;
+            if (!stopwatchActive) return;
+
+            var elapsed = playStopwatch.Elapsed;
+            LengthLabel.Text = $"Length: {elapsed.TotalSeconds:F2}s";
+            var soundPlaying = currentChannel != null && currentChannel.IsPlaying;
+            if (!soundPlaying)
+            {
+                playStopwatch.Stop();
+                playStopwatch = null;
+            }
         }
 
         private void PlaySound()
@@ -115,6 +128,8 @@ namespace FmodSoundPlayer
             currentChannel.Pitch = PitchScrollBar.Value / 100.0f;
             currentChannel.Volume = VolumeScrollBar.Value / 100.0f;
             currentChannel.Paused = false;
+            playStopwatch = new Stopwatch();
+            playStopwatch.Start();
         }
 
         private void StopSound()
@@ -152,6 +167,14 @@ namespace FmodSoundPlayer
         private void StopButton_Click(object sender, EventArgs e)
         {
             StopSound();
+        }
+
+        private void SoundList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (SoundList.SelectedItem == null || !e.Control || e.KeyCode != Keys.C) return;
+            Clipboard.SetText(SoundList.SelectedItem.ToString());
+            e.SuppressKeyPress = true;
+            e.Handled = true;
         }
     }
 }
